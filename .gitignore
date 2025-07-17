@@ -1,0 +1,19 @@
+# === Node / React / Vite ===
+node_modules/
+dist/
+.env
+.env.*
+
+# === Visual Studio ===
+.vs/
+*.user
+*.suo
+
+# === Logs ===
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === OS ===
+.DS_Store
+Thumbs.db
