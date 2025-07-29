@@ -3,7 +3,6 @@ interface DecodedToken {
     role: string;
     nameid: string;
     exp: number;
-    [key: string]: any;
 }
 
 export const decodeJwt = (token: string): DecodedToken | null => {

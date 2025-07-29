@@ -3,11 +3,22 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 
+interface Incident {
+    id: number;
+    title: string;
+    severity: string;
+    status: string;
+    type?: { name: string };
+    assignedToUser?: { email: string; id: number };
+    assignedTo?: { id: number };
+    reportedBy?: number;
+}
+
 export default function IncidentsPage() {
     const { auth } = useContext(AuthContext);
-    const [incidents, setIncidents] = useState([]);
+    const [incidents, setIncidents] = useState<Incident[]>([]);
     const [search, setSearch] = useState('');
-    const [filtered, setFiltered] = useState([]);
+    const [filtered, setFiltered] = useState<Incident[]>([]);
 
     useEffect(() => {
         if (!auth || !auth.accessToken) return;
@@ -19,7 +30,7 @@ export default function IncidentsPage() {
             const res = await axios.get('http://localhost:7173/api/incidents', config);
             const userId = parseInt(String(auth.userId));
 
-            const filteredByRole = res.data.filter((incident: any) => {
+            const filteredByRole = res.data.filter((incident: Incident) => {
                 if (auth.role === 'Admin') return true;
                 if (auth.role === 'Analyst') return incident.assignedTo?.id === userId;
                 if (auth.role === 'Employé') return incident.reportedBy === userId;
@@ -35,7 +46,7 @@ export default function IncidentsPage() {
 
     useEffect(() => {
         const term = search.toLowerCase();
-        const filteredList = incidents.filter((i: any) =>
+        const filteredList = incidents.filter((i: Incident) =>
             i.title.toLowerCase().includes(term) || i.status.toLowerCase().includes(term)
         );
         setFiltered(filteredList);
@@ -65,7 +76,7 @@ export default function IncidentsPage() {
                     </tr>
                 </thead>
                 <tbody>
-                    {filtered.map((incident: any) => (
+                    {filtered.map((incident: Incident) => (
                         <tr key={incident.id} className="border-t hover:bg-gray-100">
                             <td className="p-2">{incident.title}</td>
                             <td className="p-2">{incident.severity}</td>

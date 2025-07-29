@@ -2,6 +2,11 @@ import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 
+interface Incident {
+    assignedTo?: { id: number };
+    reportedBy?: number;
+}
+
 export default function DashboardPage() {
     const { auth } = useContext(AuthContext);
     const [stats, setStats] = useState({
@@ -26,8 +31,8 @@ export default function DashboardPage() {
             const userId = parseInt(String(auth.userId));
 
             const totalIncidents = incidentsRes.data.length;
-            const assignedIncidents = incidentsRes.data.filter((i: any) => i.assignedTo?.id === userId).length;
-            const reportedIncidents = incidentsRes.data.filter((i: any) => i.reportedBy === userId).length;
+            const assignedIncidents = incidentsRes.data.filter((i: Incident) => i.assignedTo?.id === userId).length;
+            const reportedIncidents = incidentsRes.data.filter((i: Incident) => i.reportedBy === userId).length;
 
             setStats({
                 totalIncidents,

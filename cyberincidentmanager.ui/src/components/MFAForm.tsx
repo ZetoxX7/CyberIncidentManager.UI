@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 
+interface User {
+    id: number;
+    email: string;
+}
+
 export default function MFAForm() {
     const [code, setCode] = useState('');
     const [error, setError] = useState('');
@@ -18,7 +23,7 @@ export default function MFAForm() {
 
             try {
                 const res = await axios.get(`http://localhost:7173/api/users`);
-                const user = res.data.find((u: any) => u.email === email);
+                const user = res.data.find((u: User) => u.email === email);
                 if (!user) return setError("Utilisateur non trouvé.");
                 setUserId(user.id);
             } catch {
@@ -45,6 +50,7 @@ export default function MFAForm() {
 
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
+            localStorage.setItem('expiration', expiration); // <-- Ajouté
 
             const decoded = JSON.parse(atob(accessToken.split('.')[1]));
             const { email, role, nameid } = decoded;
@@ -59,8 +65,12 @@ export default function MFAForm() {
 
             localStorage.removeItem('mfaUserEmail');
             navigate('/dashboard');
-        } catch (err: any) {
-            setError(err.response?.data || "Code incorrect.");
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err)) {
+                setError(err.response?.data || "Code incorrect.");
+            } else {
+                setError("Code incorrect.");
+            }
         }
     };
 

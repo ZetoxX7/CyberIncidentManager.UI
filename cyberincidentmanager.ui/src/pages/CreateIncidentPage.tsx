@@ -3,6 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 
+interface IncidentType {
+    id: number;
+    name: string;
+}
+
+interface Asset {
+    id: number;
+    name: string;
+}
+
+interface User {
+    id: number;
+    email: string;
+    role: { name: string };
+}
+
 export default function CreateIncidentPage() {
     const { auth } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -15,9 +31,9 @@ export default function CreateIncidentPage() {
     const [assetId, setAssetId] = useState('');
     const [assignedTo, setAssignedTo] = useState('');
 
-    const [types, setTypes] = useState([]);
-    const [assets, setAssets] = useState([]);
-    const [users, setUsers] = useState([]);
+    const [types, setTypes] = useState<IncidentType[]>([]);
+    const [assets, setAssets] = useState<Asset[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
 
     useEffect(() => {
         if (!auth || !auth.accessToken) return;
@@ -33,7 +49,7 @@ export default function CreateIncidentPage() {
 
             setTypes(typesRes.data);
             setAssets(assetsRes.data);
-            setUsers(usersRes.data.filter((u: any) => u.role.name !== 'Admin')); // éviter assignation Admin
+            setUsers(usersRes.data.filter((u: User) => u.role.name !== 'Admin')); // éviter assignation Admin
         };
 
         fetchData();
@@ -97,21 +113,21 @@ export default function CreateIncidentPage() {
 
                 <select value={typeId} onChange={(e) => setTypeId(e.target.value)} required className="w-full border p-2 rounded">
                     <option value="">Type d’incident</option>
-                    {types.map((t: any) => (
+                    {types.map((t: IncidentType) => (
                         <option key={t.id} value={t.id}>{t.name}</option>
                     ))}
                 </select>
 
                 <select value={assetId} onChange={(e) => setAssetId(e.target.value)} className="w-full border p-2 rounded">
                     <option value="">(optionnel) Asset lié</option>
-                    {assets.map((a: any) => (
+                    {assets.map((a: Asset) => (
                         <option key={a.id} value={a.id}>{a.name}</option>
                     ))}
                 </select>
 
                 <select value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)} className="w-full border p-2 rounded">
                     <option value="">(optionnel) Assigné à</option>
-                    {users.map((u: any) => (
+                    {users.map((u: User) => (
                         <option key={u.id} value={u.id}>{u.email}</option>
                     ))}
                 </select>

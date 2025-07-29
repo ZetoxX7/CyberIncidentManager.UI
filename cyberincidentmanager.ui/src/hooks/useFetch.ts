@@ -8,7 +8,7 @@ interface FetchResult<T> {
     refetch: () => void;
 }
 
-export function useFetch<T = any>(url: string, token?: string): FetchResult<T> {
+export function useFetch<T>(url: string, token?: string): FetchResult<T> {
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');

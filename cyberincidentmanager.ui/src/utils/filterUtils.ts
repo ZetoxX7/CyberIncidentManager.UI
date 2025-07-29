@@ -7,7 +7,6 @@ interface Incident {
     severity: string;
     reportedBy: number;
     assignedToUser?: { id: number };
-    [key: string]: any;
 }
 
 export const filterIncidentsByRole = (

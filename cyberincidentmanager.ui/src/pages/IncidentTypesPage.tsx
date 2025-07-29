@@ -2,11 +2,19 @@ import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 
+interface IncidentType {
+    id: number;
+    name: string;
+    description?: string;
+    defaultSeverity: string;
+    color: string;
+}
+
 export default function IncidentTypesPage() {
     const { auth } = useContext(AuthContext);
-    const [types, setTypes] = useState([]);
+    const [types, setTypes] = useState<IncidentType[]>([]);
     const [search, setSearch] = useState('');
-    const [filtered, setFiltered] = useState([]);
+    const [filtered, setFiltered] = useState<IncidentType[]>([]);
 
     useEffect(() => {
         if (!auth || !auth.accessToken) return;
@@ -23,7 +31,7 @@ export default function IncidentTypesPage() {
 
     useEffect(() => {
         const term = search.toLowerCase();
-        const result = types.filter((t: any) =>
+        const result = types.filter((t: IncidentType) =>
             t.name.toLowerCase().includes(term) ||
             t.description?.toLowerCase().includes(term)
         );
@@ -52,7 +60,7 @@ export default function IncidentTypesPage() {
                     </tr>
                 </thead>
                 <tbody>
-                    {filtered.map((type: any) => (
+                    {filtered.map((type: IncidentType) => (
                         <tr key={type.id} className="border-t hover:bg-gray-100">
                             <td className="p-2">{type.name}</td>
                             <td className="p-2 text-sm text-gray-700">{type.description || '—'}</td>

@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
+import axios, { type AxiosError } from 'axios';
 
 export default function LoginPage() {
     const { setAuth } = useContext(AuthContext);
@@ -31,6 +31,7 @@ export default function LoginPage() {
 
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
+            localStorage.setItem('expiration', expiration);
 
             const decoded = JSON.parse(atob(accessToken.split('.')[1]));
             const { email: userEmail, role, nameid } = decoded;
@@ -44,8 +45,9 @@ export default function LoginPage() {
             });
 
             navigate('/dashboard');
-        } catch (err: any) {
-            setError(err.response?.data || 'Erreur lors de la connexion');
+        } catch (err: unknown) {
+            const error = err as AxiosError<{ message?: string }>;
+            setError(error.response?.data?.message || 'Erreur lors de la connexion');
         }
     };
 

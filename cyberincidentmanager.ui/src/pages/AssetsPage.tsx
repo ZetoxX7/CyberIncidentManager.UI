@@ -2,11 +2,21 @@ import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 
+interface Asset {
+    id: number;
+    name: string;
+    type: string;
+    ipAddress: string;
+    owner: string;
+    location?: string;
+    criticality: string;
+}
+
 export default function AssetsPage() {
     const { auth } = useContext(AuthContext);
-    const [assets, setAssets] = useState([]);
+    const [assets, setAssets] = useState<Asset[]>([]);
     const [search, setSearch] = useState('');
-    const [filtered, setFiltered] = useState([]);
+    const [filtered, setFiltered] = useState<Asset[]>([]);
 
     useEffect(() => {
         if (!auth || !auth.accessToken) return;
@@ -23,7 +33,7 @@ export default function AssetsPage() {
 
     useEffect(() => {
         const term = search.toLowerCase();
-        const results = assets.filter((a: any) =>
+        const results = assets.filter((a: Asset) =>
             a.name.toLowerCase().includes(term) ||
             a.type.toLowerCase().includes(term) ||
             a.owner.toLowerCase().includes(term)
@@ -55,7 +65,7 @@ export default function AssetsPage() {
                     </tr>
                 </thead>
                 <tbody>
-                    {filtered.map((asset: any) => (
+                    {filtered.map((asset: Asset) => (
                         <tr key={asset.id} className="border-t hover:bg-gray-100">
                             <td className="p-2">{asset.name}</td>
                             <td className="p-2">{asset.type}</td>

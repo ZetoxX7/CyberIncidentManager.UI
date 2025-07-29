@@ -3,11 +3,49 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 
+// Définition des types
+interface User {
+    id: number;
+    email: string;
+    role: { name: string };
+}
+
+interface Asset {
+    id: number;
+    name: string;
+}
+
+interface IncidentType {
+    id: number;
+    name: string;
+}
+
+interface Incident {
+    id: number;
+    title: string;
+    description: string;
+    status: string;
+    severity: string;
+    type?: IncidentType;
+    asset?: Asset | null;
+    reportedByUser?: User;
+    assignedToUser?: User | null;
+}
+
+interface ResponseItem {
+    id: number;
+    action: string;
+    details: string;
+    isSuccessful: boolean;
+    user: User;
+    incident: { id: number };
+}
+
 export default function IncidentDetailPage() {
     const { id } = useParams();
     const { auth } = useContext(AuthContext);
-    const [incident, setIncident] = useState<any>(null);
-    const [responses, setResponses] = useState([]);
+    const [incident, setIncident] = useState<Incident | null>(null);
+    const [responses, setResponses] = useState<ResponseItem[]>([]);
     const [showForm, setShowForm] = useState(false);
 
     const [action, setAction] = useState('');
@@ -26,7 +64,7 @@ export default function IncidentDetailPage() {
             ]);
 
             setIncident(incidentRes.data);
-            setResponses(responseRes.data.filter((r: any) => r.incident.id === parseInt(id!)));
+            setResponses(responseRes.data.filter((r: ResponseItem) => r.incident.id === parseInt(id!)));
         };
 
         fetchData();
@@ -53,7 +91,7 @@ export default function IncidentDetailPage() {
 
         // Recharger les réponses
         const res = await axios.get('http://localhost:7173/api/responses', config);
-        setResponses(res.data.filter((r: any) => r.incident.id === parseInt(id!)));
+        setResponses(res.data.filter((r: ResponseItem) => r.incident.id === parseInt(id!)));
     };
 
     if (!incident) return <p className="p-6">Chargement...</p>;
@@ -78,7 +116,7 @@ export default function IncidentDetailPage() {
                 <p>Aucune réponse pour cet incident.</p>
             ) : (
                 <ul className="mb-6">
-                    {responses.map((r: any) => (
+                    {responses.map((r) => (
                         <li key={r.id} className="border-t py-2">
                             ✅ {r.isSuccessful ? 'Succès' : 'Échec'} – <strong>{r.action}</strong> ({r.user.email})
                             <br />
