@@ -1,6 +1,6 @@
 ﻿import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { AuthContext } from '../context/AuthProvider';
+import { AuthContext } from '../context/AuthContext';
 
 // Types stricts pour Response, User, Incident
 interface Role {

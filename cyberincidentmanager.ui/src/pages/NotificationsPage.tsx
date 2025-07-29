@@ -1,4 +1,4 @@
-import { AuthContext } from '../context/AuthProvider';
+import { AuthContext } from '../context/AuthContext';
 import { getNotificationsByUser } from '../api/notificationApi';
 import { useContext, useEffect, useState } from 'react';
 

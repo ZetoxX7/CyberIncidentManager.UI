@@ -3,8 +3,6 @@ import PrivateRoute from '../components/PrivateRoute';
 import LoginPage from '../pages/LoginPage';
 import MFAForm from '../components/MFAForm';
 import DashboardPage from '../pages/DashboardPage';
-
-// 🔜 autres pages que tu créeras ensuite :
 import IncidentsPage from '../pages/IncidentsPage';
 import CreateIncidentPage from '../pages/CreateIncidentPage';
 import IncidentDetailPage from '../pages/IncidentDetailPage';
