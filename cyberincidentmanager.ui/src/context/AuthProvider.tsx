@@ -1,8 +1,11 @@
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState, type ReactNode } from 'react';
 import { AuthContext, AuthState } from './AuthContext';
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+interface Props {
+    children: ReactNode;
+}
+
+export const AuthProvider = ({ children }: Props) => {
     const [auth, setAuth] = useState<AuthState | null>(null);
 
     return (

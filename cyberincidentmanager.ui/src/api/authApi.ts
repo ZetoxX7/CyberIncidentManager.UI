@@ -41,6 +41,6 @@ export const getUserByEmail = async (accessToken: string, email: string): Promis
     const config = {
         headers: { Authorization: `Bearer ${accessToken}` }
     };
-    const res = await axios.get<User[]>(`http://localhost:5000/api/users`, config);
+    const res = await axios.get<User[]>(`${API_URL.replace('/auth', '')}/users`, config);
     return res.data.find((u: User) => u.email === email);
 };

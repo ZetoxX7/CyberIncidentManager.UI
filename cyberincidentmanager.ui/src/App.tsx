@@ -1,5 +1,5 @@
 ﻿import { useContext } from 'react';
-import { AuthContext } from './context/AuthContext';
+import { AuthContext } from './context/AuthProvider';
 import AppRouter from './routes/AppRouter';
 import Navbar from './components/Navbar';
 
