@@ -21,11 +21,6 @@ export const login = async (email: string, password: string) => {
     return res.data;
 };
 
-export const verifyMfa = async (userId: number, code: string) => {
-    const res = await axios.post(`${API_URL}/verify-mfa`, { userId, code });
-    return res.data;
-};
-
 export const refreshToken = async (token: string): Promise<AuthResponse> => {
     const res = await axios.post<AuthResponse>(`${API_URL}/refresh`, token, {
         headers: { 'Content-Type': 'application/json' }
@@ -41,7 +36,7 @@ export const logout = async (accessToken: string) => {
     return res.data;
 };
 
-// Bonus : récupérer un utilisateur via son email (utile pour MFA)
+// Récupérer un utilisateur via son email
 export const getUserByEmail = async (accessToken: string, email: string): Promise<User | undefined> => {
     const config = {
         headers: { Authorization: `Bearer ${accessToken}` }
